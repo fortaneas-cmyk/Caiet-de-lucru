@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecția 1 - Să facem cunoștință</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .vocabulary { display: flex; flex-wrap: wrap; }
+        .card { border: 1px solid #ccc; margin: 10px; padding: 10px; width: 150px; text-align: center; }
+        .draggable { cursor: pointer; }
+        .dropzone { border: 2px dashed #ccc; height: 50px; margin: 10px; }
+        #canvas { border: 1px solid #000; }
+    </style>
+</head>
+<body>
+
+<h1>Lecția 1 - Să facem cunoștință</h1>
+
+<h2>Vocabulary Cards</h2>
+<div class="vocabulary">
+    <div class="card" onclick="speak('câine')">
+        <img src="dog.jpg" alt="Câine" width="100">
+        <p>Câine</p>
+    </div>
+    <div class="card" onclick="speak('pisică')">
+        <img src="cat.jpg" alt="Pisică" width="100">
+        <p>Pisică</p>
+    </div>
+    <!-- Add more vocabulary cards as needed -->
+</div>
+
+<h2>Drag-and-Drop Vocabulary Matching</h2>
+<div class="dropzone" id="drop1">Câine</div>
+<div class="dropzone" id="drop2">Pisică</div>
+<div class="draggable" draggable="true" ondragstart="drag(event)">Câine</div>
+<div class="draggable" draggable="true" ondragstart="drag(event)">Pisică</div>
+
+<h2>Canvas Coloring Tool</h2>
+<input type="color" id="colorPicker" value="#ff0000">
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<h2>Interactive Quiz Game</h2>
+<div id="quiz">
+    <p>Ce animal face muuu?</p>
+    <button onclick="checkAnswer('Câine')">Câine</button>
+    <button onclick="checkAnswer('Pisică')">Pisică</button>
+    <p id="quizFeedback"></p>
+</div>
+
+<script>
+    function speak(word) {
+        const utterance = new SpeechSynthesisUtterance(word);
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.innerHTML);
+    }
+
+    const dropzones = document.querySelectorAll('.dropzone');
+    dropzones.forEach(dropzone => {
+        dropzone.addEventListener('dragover', (event) => event.preventDefault());
+        dropzone.addEventListener('drop', (event) => {
+            const data = event.dataTransfer.getData("text");
+            event.target.innerHTML = data;
+        });
+    });
+
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    document.getElementById('colorPicker').addEventListener('input', (event) => {
+        context.fillStyle = event.target.value;
+    });
+
+    function checkAnswer(answer) {
+        const feedback = document.getElementById('quizFeedback');
+        if (answer === 'Câine') {
+            feedback.innerText = 'Corect!';
+        } else {
+            feedback.innerText = 'Greșit, încearcă din nou!';
+        }
+    }
+</script>
+
+</body>
+</html>
